@@ -12,12 +12,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/rest": "^1.4.0",
     "axios": "^1.2.0",
     "cheerio": "^1.0.0-rc.12",
     "discord": "^0.8.2",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "underscore": "^1.13.6",
+    "underscore.js": "^1.0.0"
   },
   "type": "module"
 }
