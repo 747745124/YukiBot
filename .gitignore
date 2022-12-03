@@ -1,0 +1,4 @@
+.env
+security_info.json
+misc/*
+node_modules/*
