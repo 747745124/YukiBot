@@ -1,6 +1,6 @@
 import { Client, GatewayIntentBits, TextChannel } from 'discord.js'
 import { config } from 'dotenv'
-import { checker } from './utilities/index.js'
+import { checker } from './utilities/4090_checker.js'
 import { formatter } from './utilities/message_formatter.js'
 
 config();
