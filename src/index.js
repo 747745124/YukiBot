@@ -39,7 +39,7 @@ client.on('ready', () => {
     checker(60000, (product) => {
         message = product
         channel.send(
-            ' :alarm_clock: *New Stock on Best Buy Now Available!*:alarm_clock:'
+            ' :alarm_clock: *New Stock on Best Buy Now Available!*:alarm_clock: @everyone'
         )
         channel.send(
             { embeds: [formatter(message)] }

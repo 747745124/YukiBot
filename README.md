@@ -1,4 +1,4 @@
-### YukiBot:
+## YukiBot:
 
 YukiBot is a bot project based on `discord.js`. I am going to implement several features for YukiBot such as stock tracking, mini-games etc..
 
@@ -70,7 +70,7 @@ checker(60000, (product) => {
 
 
 
-### To_DO:
+### To Do:
 
 * Unit testing
 * Mini games implementation
