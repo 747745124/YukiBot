@@ -22,11 +22,13 @@ STOCK_ID=YOUR THREAD ID FOR 4090 TRACKING
 
 ### Features Implemented:
 
+* ##### RTX 4090 Tracking (items from Best Buy only for now). 
+
 #### checker (interval, callback)
 
 >  /src/4090_checker.js
 
-RTX 4090 Tracking (items from Best Buy only for now). On available item tracked, the bot will send a formatted message to the thread (STOCK_ID).
+On available item tracked, the bot will send a formatted message to the thread (STOCK_ID).
 
 * Interval: polling interval
 
@@ -42,13 +44,13 @@ RTX 4090 Tracking (items from Best Buy only for now). On available item tracked,
 
     
 
-##### Modify:
+#### Modify:
 
 To modify the items being tracked on Best Buy, modify the variable `urls` in the `checker` function. Note that this function only works with Best Buy links for now.
 
 
 
-##### SAMPLE USAGE:
+#### SAMPLE USAGE:
 
 ```javascript
 // code below set a tracker for RTX 4090 with 60s polling interval
