@@ -5,7 +5,7 @@ import { formatter } from './utilities/message_formatter.js'
 import { REST } from '@discordjs/rest'
 import _ from 'underscore'
 import thanos from './commands/thanos.js'
-import { music_formatter } from './utilities/get_music_from_spotify.js'
+// import { Music_API_Controller } from './utilities/get_music_from_spotify.js'
 
 config();
 
