@@ -22,7 +22,7 @@ const RestockChecker = function (interval, proxies = null) {
                 this.currentProxy = null;
             }
 
-            checkStock(this.urls, this.interval, this.currentProxy, (err, product) => {
+            checkStock(this.urls, (err, product) => {
                 if (err) {
                     this.emit('error', err);
                 }
@@ -45,7 +45,7 @@ const RestockChecker = function (interval, proxies = null) {
     }
 };
 
-const checkStock = (urls, interval, proxy, cb) => {
+const checkStock = (urls, cb) => {
 
     for (var url of urls) {
         axios.get(url, {
@@ -78,7 +78,7 @@ const checkStock = (urls, interval, proxy, cb) => {
             }
         }).catch((err) => {
             console.log(err);
-            return cb(null, null);
+            return cb(err, null);
         })
     }
 };

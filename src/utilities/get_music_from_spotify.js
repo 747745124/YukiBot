@@ -2,7 +2,18 @@ import axios from 'axios'
 //give a song_name, return the most related song info
 const Music_API_Controller = () => {
 
-
+    const __get_token = async () => {
+        const clientId = 'b8a64fb523ae4bc29c758c500516e0cd'
+        const clientSecret = 'c93b02e3462649aaa3783af98e54c59f'
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret),
+        }
+        const uri = 'https://accounts.spotify.com/api/token'
+        await axios.post(uri, 'grant_type=client_credentials', headers).then((res) => {
+            console.log(res.data)
+        })
+    }
 
     const headers = {
         'Accept-Encoding': 'application/json',

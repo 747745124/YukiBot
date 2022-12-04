@@ -24,6 +24,8 @@ STOCK_ID=YOUR THREAD ID FOR 4090 TRACKING
 
 * ##### RTX 4090 Tracking (items from Best Buy only for now). 
 
+  * You can modify it to any item from BestBuy
+
 #### checker (interval, callback)
 
 >  /src/4090_checker.js

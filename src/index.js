@@ -1,6 +1,8 @@
 import { Client, GatewayIntentBits, TextChannel, Routes, AutoModerationActionExecution, SlashCommandBuilder, PermissionFlagsBits, Guild, GuildChannel } from 'discord.js'
 import { config } from 'dotenv'
 import { checker } from './utilities/4090_checker.js'
+import { curr_checker } from './utilities/currency_checker.js'
+import { checkRate } from './utilities/currency.js'
 import { formatter } from './utilities/message_formatter.js'
 import { REST } from '@discordjs/rest'
 import _ from 'underscore'
@@ -32,6 +34,33 @@ async function main() {
             description: 'Randomly timeout a user for a random period of time, the upper limit would be 2 minutes.'
         }]
 
+    //register playmusic command
+    const playMusic_cmd = new SlashCommandBuilder()
+        .setName("playmusic")
+        .setDescription("Play a piece of music from Spotify")
+        .addStringOption(option =>
+            option
+                .setName('song_name')
+                .setDescription('The song to be played')
+                .setRequired(true))
+
+    const checkRate_cmd = new SlashCommandBuilder()
+        .setName("checkrate")
+        .setDescription("check conversion rate for 2 different currencies, in all caps e.g. USD, CNY, GPD, EUR")
+        .addStringOption(option =>
+            option
+                .setName('currency_1')
+                .setDescription('The first currency')
+                .setRequired(true)).addStringOption(option =>
+                    option
+                        .setName('currency_2')
+                        .setDescription('The second currency')
+                        .setRequired(true))
+
+
+    commands.push(playMusic_cmd.toJSON())
+    commands.push(checkRate_cmd.toJSON())
+
     try {
         //login
         client.login(process.env.YUKI_BOT_TOKEN);
@@ -46,19 +75,6 @@ async function main() {
             body: commands
         });
 
-        //register playmusic command
-        const guildCommand = new SlashCommandBuilder()
-            .setName("playmusic")
-            .setDescription("Play a piece of music from Spotify")
-            .addStringOption(option =>
-                option
-                    .setName('song_name')
-                    .setDescription('The song to be played')
-                    .setRequired(true))
-
-        await rest.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID), {
-            body: [guildCommand.toJSON()]
-        })
 
         //Basic greetings
         client.on('messageCreate', (message) => {
@@ -85,6 +101,22 @@ async function main() {
                 );
             });
         })
+
+
+        //currency_checker
+        client.on('ready', () => {
+            const channel = client.channels.cache.get(process.env.LOBBY_ID)
+
+            curr_checker(1000 * 60 * 60 * 24, (rate) => {
+                // console.log(rate)
+                if (rate < 7.0)
+                    channel.send(
+                        ` :alarm_clock: *Current USD to CNY rate is ${rate} *:alarm_clock: @everyone`
+                    )
+                channel.send(`USD to CNY conversion at ${new Date()} is ${rate}`)
+            });
+        });
+
 
         //show todo list (notion)
         client.on('interactionCreate', (interaction) => {
@@ -123,6 +155,7 @@ async function main() {
             }
         })
 
+        //Work in Progress, Use Spotify API
         client.on('interactionCreate', async (interaction) => {
 
             const channel = client.channels.cache.get(process.env.LOBBY_ID)
@@ -133,6 +166,31 @@ async function main() {
                     'https://open.spotify.com/track/4rDpP5uHieSTcblNk7wQ2y'
                 )
                 interaction.reply({ content: 'Now Playing...' })
+            }
+
+        });
+
+        //currency rate checker
+        client.on('interactionCreate', async (interaction) => {
+            const channel = client.channels.cache.get(process.env.LOBBY_ID)
+
+            if (interaction.commandName == 'checkrate') {
+                const curr_1 = interaction.options.get('currency_1').value;
+                const curr_2 = interaction.options.get('currency_2').value;
+                console.log(curr_1, curr_2);
+
+                checkRate(curr_1, curr_2, null, (err, rate) => {
+                    if (err)
+                        console.log(err);
+                    else if (rate == null)
+                        interaction.reply({ content: 'Not rate found, check with your input.' })
+                    else {
+                        interaction.reply({ content: 'Result:' })
+                        channel.send(
+                            `The rate from ${curr_1} to ${curr_2} is ${rate} at ${new Date()}`
+                        )
+                    }
+                })
             }
 
         });

@@ -9,6 +9,8 @@ function checker(interval, callback) {
         callback(product);
     });
 
+    r.on('error', (error) => { console.log(error); })
+
     var urls = [
         'https://www.bestbuy.com/site/gigabyte-nvidia-geforce-rtx-4090-gaming-oc-24gb-gddr6x-pci-express-4-0-graphics-card-black/6521518.p?skuId=6521518',
         'https://www.bestbuy.com/site/msi-nvidia-geforce-rtx-4090-gaming-trio-24g-24gb-ddr6x-pci-express-4-0-graphics-card/6522371.p?skuId=6522371',
