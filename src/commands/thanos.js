@@ -11,6 +11,6 @@ export default {
                 .setRequired(true))
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
     async execute(interaction) {
-        await userban
+
     },
 };

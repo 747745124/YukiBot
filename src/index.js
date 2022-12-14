@@ -7,7 +7,7 @@ import { formatter } from './utilities/message_formatter.js'
 import { REST } from '@discordjs/rest'
 import _ from 'underscore'
 import thanos from './commands/thanos.js'
-// import { Music_API_Controller } from './utilities/get_music_from_spotify.js'
+import { Music_API_Controller } from './utilities/get_music_from_spotify.js'
 
 config();
 
@@ -43,6 +43,11 @@ async function main() {
                 .setName('song_name')
                 .setDescription('The song to be played')
                 .setRequired(true))
+        .addStringOption(option =>
+            option
+                .setName('artist_name')
+                .setDescription('The artist of the song')
+                .setRequired(false))
 
     const checkRate_cmd = new SlashCommandBuilder()
         .setName("checkrate")
@@ -91,7 +96,7 @@ async function main() {
         client.on('ready', () => {
             const channel = client.channels.cache.get(process.env.STOCK_ID)
             let message = {}
-            checker(60000, (product) => {
+            checker(60000 * 2, (product) => {
                 message = product
                 channel.send(
                     ' :alarm_clock: *New Stock on Best Buy Now Available!*:alarm_clock: @everyone'
@@ -107,7 +112,7 @@ async function main() {
         client.on('ready', () => {
             const channel = client.channels.cache.get(process.env.LOBBY_ID)
 
-            curr_checker(1000 * 60 * 60 * 24, (rate) => {
+            curr_checker(1000 * 60 * 60 * 6, (rate) => {
                 // console.log(rate)
                 if (rate < 7.0)
                     channel.send(
@@ -155,18 +160,30 @@ async function main() {
             }
         })
 
-        //Work in Progress, Use Spotify API
+        //Use Spotify API to play music
         client.on('interactionCreate', async (interaction) => {
-
             const channel = client.channels.cache.get(process.env.LOBBY_ID)
-            if (interaction.commandName == 'playmusic') {
-                const song_name = interaction.options.get('song_name').value;
 
-                channel.send(
-                    'https://open.spotify.com/track/4rDpP5uHieSTcblNk7wQ2y'
-                )
-                interaction.reply({ content: 'Now Playing...' })
+            if (interaction.commandName == 'playmusic') {
+                const music_player = Music_API_Controller
+                var artist_name = (interaction.options.get('artist_name'))
+                if (artist_name)
+                    artist_name = artist_name.value
+
+                const song_name = interaction.options.get('song_name').value;
+                const token = await music_player.get_token()
+                const track = await music_player.track_searcher(token, song_name, artist_name)
+
+                if (track.length == 0)
+                    interaction.reply({ content: 'No track found, check with your input.' })
+                else {
+                    channel.send(
+                        track
+                    )
+                    interaction.reply({ content: 'Now Playing...' })
+                }
             }
+
 
         });
 

@@ -1,43 +1,53 @@
 import axios from 'axios'
+import { config } from 'dotenv'
+import cheerio from 'cheerio'
 //give a song_name, return the most related song info
-const Music_API_Controller = () => {
-
+const Music_API_Controller = (function () {
+    config();
     const __get_token = async () => {
-        const clientId = 'b8a64fb523ae4bc29c758c500516e0cd'
-        const clientSecret = 'c93b02e3462649aaa3783af98e54c59f'
+        const clientId = process.env.SPOTIFY_ID
+        const clientSecret = process.env.SPOTIFY_SECRET
         const headers = {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
             'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret),
         }
+
         const uri = 'https://accounts.spotify.com/api/token'
-        await axios.post(uri, 'grant_type=client_credentials', headers).then((res) => {
-            console.log(res.data)
-        })
+        const result = await fetch(uri, {
+            method: 'POST',
+            headers: headers,
+            body: 'grant_type=client_credentials'
+        });
+
+        const data = await result.json();
+        return data.access_token;
     }
 
-    const headers = {
-        'Accept-Encoding': 'application/json',
-        'Connection': 'keep-alive',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-        'Accept-Language': 'en-US;q=0.9,en;q=0.8',
-        'Authorization': 'Bearer c93b02e3462649aaa3783af98e54c59f'
-    }
-
-    const music_formatter = (song_name) => {
-        const url = 'https://api.spotify.com/v1/search?' + 'type=track' + '&' + `track=${song_name}`
-        axios.get(url, headers).then((res) => {
-            const $ = cheerio.load(res.data);
-            console.log(`Axios got ${res.status}`);
-            console.log(res.data);
-        }
-        ).catch((err) => {
-            console.log(err);
-        })
-
+    const __track_searcher = async (token, song, artist = '') => {
+        const url = 'https://api.spotify.com/v1/search?query=' + song + '+' + artist + '&type=track&market=US&offset=0&limit=1'
+        // console.log(url)
+        const result = await fetch(url, {
+            'method': 'GET',
+            'headers': {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+        const data = await result.json();
+        // console.log(data)
+        return data.tracks.items[0].external_urls.spotify;
     };
-    __get_token();
-}
 
-Music_API_Controller();
+    return {
+        get_token() {
+            return __get_token();
+        },
+        track_searcher(token, song, artist = '') {
+            return __track_searcher(token, song, artist = '');
+        },
+    }
+    //test function
+    // __get_token().then((token) => { track_searcher(token, 'blue bucket', 'sufjan') });
+})();
+
 
 export { Music_API_Controller };

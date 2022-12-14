@@ -51,7 +51,6 @@ const checkStock = (urls, cb) => {
         axios.get(url, {
             headers: {
                 'Accept-Encoding': 'application/json',
-                'Connection': 'keep-alive',
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
                 'Accept-Language': 'en-US;q=0.9,en;q=0.8',
             }
