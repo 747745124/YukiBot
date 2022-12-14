@@ -33,7 +33,7 @@ SPOTIFY_SECRET=YOUR SPOTIFY APPLICATION SECRET
   * You can modify it to any item from BestBuy
   * 3080 Ti for demonstration as 4090s were rare to see.
   
-  <img src="/Users/naoyuki/Library/Application%20Support/typora-user-images/image-20221214172316501.png" alt="image-20221214172316501" style="zoom:50%;" />
+  <img src="https://live.staticflickr.com/65535/52564439268_4f1c6ebd6d_o.png" alt="image-20221214172316501" style="zoom:50%;" />
 
 
 
