@@ -1,24 +1,16 @@
-import { ChatGPTAPI, getOpenAIAuth } from 'chatgpt'
+import { ChatGPTAPIBrowser } from 'chatgpt'
 import { config } from 'dotenv'
 
+config();
 async function example() {
-    config();
-    // use puppeteer to bypass cloudflare (headful because of captchas)
-    const openAIAuth = await getOpenAIAuth({
+    const api = new ChatGPTAPIBrowser({
         email: process.env.OPENAI_EMAIL,
-        password: process.env.OPENAI_PASSWORD
+        password: process.env.OPENAI_PASSWORD,
+        isGoogleLogin: true
     })
-
-    const api = new ChatGPTAPI({ ...openAIAuth })
-    await api.ensureAuth()
-
-    // send a message and wait for the response
-    const response = await api.sendMessage(
-        'Write a python version of bubble sort.'
-    )
-
-    // response is a markdown-formatted string
-    console.log(response)
+    await api.initSession();
+    const result = await api.sendMessage('Hello World!')
+    console.log(result.response)
 }
 
-example()
+// example()

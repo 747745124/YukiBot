@@ -6,6 +6,7 @@ import { checkRate } from './utilities/currency.js'
 import { formatter } from './utilities/message_formatter.js'
 import { REST } from '@discordjs/rest'
 import _ from 'underscore'
+import { ChatGPTAPIBrowser } from 'chatgpt'
 import thanos from './commands/thanos.js'
 import { Music_API_Controller } from './utilities/get_music_from_spotify.js'
 
@@ -67,6 +68,14 @@ async function main() {
     commands.push(checkRate_cmd.toJSON())
 
     try {
+
+        // const chat_gpt_api = new ChatGPTAPIBrowser({
+        //     email: process.env.OPENAI_EMAIL,
+        //     password: process.env.OPENAI_PASSWORD,
+        //     isGoogleLogin: true
+        // })
+        // await chat_gpt_api.initSession();
+
         //login
         client.login(process.env.YUKI_BOT_TOKEN);
         client.on('ready', () => {
@@ -105,6 +114,13 @@ async function main() {
                     { embeds: [formatter(message)] }
                 );
             });
+        })
+
+        //chatgpt api integration
+        client.on('messageCreate', async (message) => {
+            const channel = client.channels.cache.get(process.env.CHAT_GPT_ID)
+            const result = await chat_gpt_api.sendMessage(message)
+            channel.send(result.response);
         })
 
 
