@@ -14,10 +14,12 @@
   "dependencies": {
     "@discordjs/rest": "^1.4.0",
     "axios": "^1.2.0",
+    "chatgpt": "^2.3.2",
     "cheerio": "^1.0.0-rc.12",
     "discord": "^0.8.2",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
+    "puppeteer": "^19.4.0",
     "request": "^2.88.2",
     "underscore": "^1.13.6",
     "underscore.js": "^1.0.0"
