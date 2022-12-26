@@ -5,6 +5,9 @@ import { curr_checker } from './utilities/currency_checker.js'
 import { checkRate } from './utilities/currency.js'
 import { formatter } from './utilities/message_formatter.js'
 import { REST } from '@discordjs/rest'
+import roles_cmd from './commands/role_operation.js'
+import play_music_cmd from './commands/play_music.js'
+import check_rate_cmd from './commands/check_rate.js'
 import _ from 'underscore'
 import { ChatGPTAPIBrowser } from 'chatgpt'
 import thanos from './commands/thanos.js'
@@ -35,37 +38,9 @@ async function main() {
             description: 'Randomly timeout a user for a random period of time, the upper limit would be 2 minutes.'
         }]
 
-    //register playmusic command
-    const playMusic_cmd = new SlashCommandBuilder()
-        .setName("playmusic")
-        .setDescription("Play a piece of music from Spotify")
-        .addStringOption(option =>
-            option
-                .setName('song_name')
-                .setDescription('The song to be played')
-                .setRequired(true))
-        .addStringOption(option =>
-            option
-                .setName('artist_name')
-                .setDescription('The artist of the song')
-                .setRequired(false))
-
-    const checkRate_cmd = new SlashCommandBuilder()
-        .setName("checkrate")
-        .setDescription("check conversion rate for 2 different currencies, in all caps e.g. USD, CNY, GPD, EUR")
-        .addStringOption(option =>
-            option
-                .setName('currency_1')
-                .setDescription('The first currency')
-                .setRequired(true)).addStringOption(option =>
-                    option
-                        .setName('currency_2')
-                        .setDescription('The second currency')
-                        .setRequired(true))
-
-
-    commands.push(playMusic_cmd.toJSON())
-    commands.push(checkRate_cmd.toJSON())
+    commands.push(play_music_cmd)
+    commands.push(check_rate_cmd)
+    commands.push(roles_cmd)
 
     try {
 
